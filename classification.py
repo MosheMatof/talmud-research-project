@@ -13,14 +13,14 @@ tokenizer = AutoTokenizer.from_pretrained('dicta-il/BEREL_2.0')
 model = BertModel.from_pretrained('dicta-il/BEREL_2.0')
 # model = BertForMaskedLM.from_pretrained('dicta-il/BEREL_2.0')
 
-def generate_vectors(df, content_column, vectors_file):
-    vectors = []
+def generate_vectors(df, name_column, content_column, vectors_file):
+    vectors = {}
     for _, row in tqdm(df.iterrows(), total=df.shape[0]):
         inputs = tokenizer(row[content_column], return_tensors='pt', truncation=True, max_length=512)
         outputs = model(**inputs)
         # Take the mean of the last hidden state to get a single vector that represents the entire text
         mean_vector = torch.mean(outputs.last_hidden_state, dim=1).detach().numpy().flatten().tolist()
-        vectors.append(mean_vector)
+        vectors[row[name_column]] = mean_vector
 
     # Save vectors as a pickle file
     with open(vectors_file, 'wb') as f:
