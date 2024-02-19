@@ -15,7 +15,7 @@ model = BertModel.from_pretrained('dicta-il/BEREL_2.0')
 
 def generate_vectors(df, content_column, vectors_file):
     vectors = []
-    for _, row in df.iterrows():
+    for _, row in tqdm(df.iterrows(), total=df.shape[0]):
         inputs = tokenizer(row[content_column], return_tensors='pt', truncation=True, max_length=512)
         outputs = model(**inputs)
         # Take the mean of the last hidden state to get a single vector that represents the entire text
