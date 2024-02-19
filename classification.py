@@ -6,10 +6,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 
-from transformers import BertModel, BertTokenizer
-model = BertModel.from_pretrained('dicta-il/BEREL')
-tokenizer = BertTokenizer.from_pretrained('dicta-il/BEREL')
-
+from transformers import AutoTokenizer, BertForMaskedLM
+tokenizer = AutoTokenizer.from_pretrained('dicta-il/BEREL_2.0')
+model = BertForMaskedLM.from_pretrained('dicta-il/BEREL_2.0')
 def classify_vector(df, content_column, label_column):
     df.dropna(subset=[content_column, label_column], inplace=True)
 
