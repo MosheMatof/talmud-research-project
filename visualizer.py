@@ -45,9 +45,14 @@ def plot_vectors(pickle_file):
     # Convert list of lists to 2D NumPy array
     vectors = np.array(vectors)
 
-    # Now you can use fit_transform
-    vectors_3d = tsne.fit_transform(vectors)
-    # Create a DataFrame for the 3D vectors
+    # Assuming that vectors is a list of vectors
+    n_samples = len(vectors)
+
+    # Set perplexity to a value less than n_samples
+    perplexity = n_samples - 1 if n_samples > 1 else 1
+
+    tsne = TSNE(n_components=3, perplexity=perplexity)
+    vectors_3d = tsne.fit_transform(vectors)    # Create a DataFrame for the 3D vectors
     df = pd.DataFrame(vectors_3d, columns=['x', 'y', 'z'])
     df['name'] = names
 
