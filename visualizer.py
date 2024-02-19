@@ -26,6 +26,7 @@
 #     plt.show()
 import pickle
 import pandas as pd
+import numpy as np
 import plotly.express as px
 from sklearn.manifold import TSNE
 
@@ -40,8 +41,12 @@ def plot_vectors(pickle_file):
 
     # Reduce dimensionality to 3D using t-SNE
     tsne = TSNE(n_components=3)
-    vectors_3d = tsne.fit_transform(vectors)
 
+    # Convert list of lists to 2D NumPy array
+    vectors = np.array(vectors)
+
+    # Now you can use fit_transform
+    vectors_3d = tsne.fit_transform(vectors)
     # Create a DataFrame for the 3D vectors
     df = pd.DataFrame(vectors_3d, columns=['x', 'y', 'z'])
     df['name'] = names
