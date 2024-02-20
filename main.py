@@ -5,5 +5,5 @@ import pandas as pd
 
 generate_csv_from_txt('./test.csv')
 df = pd.read_csv('./test.csv')
-generate_vectors(df, 'content', 'vectors.pkl')
+generate_vectors(df,'name', 'content', 'vectors.pkl')
 plot_vectors('vectors.pkl')
