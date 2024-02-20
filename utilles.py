@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-files_path = './sfarim/baycha'
+files_path = './sfarim/brachot'
 def generate_csv_from_txt(csv_file_path, folder_path = files_path):
     data = []
     for dirpath, dirnames, filenames in os.walk(folder_path):
