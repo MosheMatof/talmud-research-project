@@ -3,7 +3,7 @@ from sklearn.decomposition import PCA
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-def plot_vectors(pickle_file):
+def plot_vectors(pickle_file, show_plot=True):
     # Load vectors from pickle file
     with open(pickle_file, 'rb') as f:
         vectors = pickle.load(f)
@@ -23,7 +23,11 @@ def plot_vectors(pickle_file):
     for i, name in enumerate(names):
         plot.text(vectors_2d[i, 0], vectors_2d[i, 1], name)
 
-    plt.show()
+    if show_plot:
+        plt.show()
+    else:
+        return plt.gcf()
+
 
 def plot_vectors(vectors, labels, classifier_name, metrics, pdf_pages):
     # Reduce dimensionality to 2D using PCA
