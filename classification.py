@@ -95,9 +95,9 @@ def train_multiple_classifiers(vectors_file):
             y_pred = classifier.predict(X_test)
 
             # Calculate metrics
-            precision = precision_score(y_test, y_pred, average='weighted')
+            precision = precision_score(y_test, y_pred, average='weighted', zero_division=0)
             recall = recall_score(y_test, y_pred, average='weighted', zero_division=0)
-            f1 = f1_score(y_test, y_pred, average='weighted')
+            f1 = f1_score(y_test, y_pred, average='weighted', zero_division=0)
             accuracy = accuracy_score(y_test, y_pred)
 
             metrics = {
