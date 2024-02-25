@@ -5,8 +5,17 @@ import numpy as np
 import torch
 import pickle
 from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
+from sklearn.model_selection import train_test_split, KFold
+from sklearn.metrics import classification_report, precision_score, recall_score, f1_score, accuracy_score
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+import matplotlib.pyplot as plt
+# from sklearn.metrics import plot_confusion_matrix
+from matplotlib.backends.backend_pdf import PdfPages
+
+from visualizer import plot_vectors
 
 from transformers import AutoTokenizer, BertModel, BertForMaskedLM
 tokenizer = AutoTokenizer.from_pretrained('dicta-il/BEREL_2.0')
@@ -55,6 +64,73 @@ def train_classifier(vectors, labels, Classifier):
 
     return classifier
 
+
+def train_multiple_classifiers(vectors_file):
+    classifiers = [LogisticRegression, SVC, GaussianNB, RandomForestClassifier, GradientBoostingClassifier]
+
+    # Load vectors from a pickle file
+    with open(vectors_file, 'rb') as f:
+        vectors_dict = pickle.load(f)
+
+    # Extract vectors and labels from the dictionary
+    labels = [key.split('_')[-1] for key in vectors_dict.keys()]
+    vectors = list(vectors_dict.values())
+
+    # Prepare a list to store the results and a PdfPages object to store the plots
+    results = []
+    pdf_pages = PdfPages('classifier_plots.pdf')
+
+    # Create a KFold object for 5-fold cross-validation
+    kf = KFold(n_splits=5, shuffle=True, random_state=42)
+
+    # Train each classifier, store the results, and plot the 2D vectors
+    for Classifier in tqdm(classifiers):
+        fold_results = []
+        for train_index, test_index in kf.split(vectors):
+            X_train, X_test = np.array(vectors)[train_index], np.array(vectors)[test_index]
+            y_train, y_test = np.array(labels)[train_index], np.array(labels)[test_index]
+
+            classifier = Classifier()
+            classifier.fit(X_train, y_train)
+            y_pred = classifier.predict(X_test)
+
+            # Calculate metrics
+            precision = precision_score(y_test, y_pred, average='weighted')
+            recall = recall_score(y_test, y_pred, average='weighted', zero_division=0)
+            f1 = f1_score(y_test, y_pred, average='weighted')
+            accuracy = accuracy_score(y_test, y_pred)
+
+            metrics = {
+                'Classifier': Classifier.__name__,
+                'Precision': precision,
+                'Recall': recall,
+                'F1 Score': f1,
+                'Accuracy': accuracy
+            }
+
+            # Store the results
+            fold_results.append(metrics)
+
+            # Plot the 2D vectors
+            plot_vectors(X_test, y_pred, Classifier.__name__, metrics, pdf_pages)
+
+        # Average the metrics over all folds and store the results
+        numeric_keys = ['Precision', 'Recall', 'F1 Score', 'Accuracy']
+        avg_metrics = {key: np.mean([metrics[key] for metrics in fold_results]) for key in numeric_keys}
+        avg_metrics['Classifier'] = fold_results[0]['Classifier']
+        results.append(avg_metrics)
+
+        # Save the trained classifier
+        with open(f'classifiers/{Classifier.__name__}_classifier.pkl', 'wb') as f:
+            pickle.dump(classifier, f)
+
+    # Close the PdfPages object
+    pdf_pages.close()
+
+    # Convert the results to a DataFrame and save it as a CSV file
+    df = pd.DataFrame(results)
+    df.to_csv('classifier_metrics.csv', index=False)
+
 def classify_document(single_document, classifier):
     inputs = tokenizer(single_document, return_tensors='pt', truncation=True, max_length=512)
     outputs = model(**inputs)
@@ -82,3 +158,9 @@ def compare_with_documents(single_document, class_vectors):
     best_class = max(similarities, key=similarities.get)
 
     return best_class
+
+def get_saved_classifier(classifier_name):
+    with open(f'classifiers/{classifier_name}_classifier.pkl', 'rb') as f:
+        classifier = pickle.load(f)
+
+    return classifier

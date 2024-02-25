@@ -1,1 +1,10 @@
 /.venv
+sfarim.csv
+classifiers
+vectors.pkl
+classifier_plots.pdf
+classifier_metrics.csv
+__pycache__/classification.cpython-310.pyc
+__pycache__/utilles.cpython-310.pyc
+__pycache__/visualizer.cpython-310.pyc
+.vscode/launch.json
