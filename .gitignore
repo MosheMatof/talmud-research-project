@@ -1,4 +1,5 @@
 /.venv
+main.py
 sfarim.csv
 classifiers
 vectors.pkl
