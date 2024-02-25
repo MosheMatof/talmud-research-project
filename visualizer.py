@@ -4,20 +4,24 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 def plot_vectors(pickle_file, show_plot=True):
-    # Load vectors from pickle file
+    # Load vectors from a pickle file
     with open(pickle_file, 'rb') as f:
-        vectors = pickle.load(f)
+        vectors_dict = pickle.load(f)
+
+    # Extract vectors and labels from the dictionary
+    labels = [key.split('_')[-1] for key in vectors_dict.keys()]
+    vectors = list(vectors_dict.values())
 
     # Separate names and vectors
-    names = list(vectors.keys())
-    vectors = list(vectors.values())
+    names = [key.split('_')[0] for key in vectors_dict.keys()]
 
     # Reduce dimensionality to 2D using PCA
     pca = PCA(n_components=2)
     vectors_2d = pca.fit_transform(vectors)
 
     # Plot the 2D vectors using seaborn
-    plot = sns.scatterplot(x=vectors_2d[:, 0], y=vectors_2d[:, 1])
+    # plot = sns.scatterplot(x=vectors_2d[:, 0], y=vectors_2d[:, 1])
+    plot = sns.scatterplot(x=vectors_2d[:, 0], y=vectors_2d[:, 1], hue=labels, palette='hls')
 
     # Add text labels for each point
     for i, name in enumerate(names):
@@ -29,7 +33,7 @@ def plot_vectors(pickle_file, show_plot=True):
         return plt.gcf()
 
 
-def plot_vectors(vectors, labels, classifier_name, metrics, pdf_pages):
+def plot_vectors_to_pdf(vectors, labels, classifier_name, metrics, pdf_pages):
     # Reduce dimensionality to 2D using PCA
     pca = PCA(n_components=2)
     vectors_2d = pca.fit_transform(vectors)

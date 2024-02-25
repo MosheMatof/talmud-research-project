@@ -6,5 +6,5 @@ import pandas as pd
 # generate_csv_from_txt('./sfarim.csv')
 # df = pd.read_csv('./sfarim.csv')
 # generate_vectors(df,'name', 'content', 'vectors.pkl')
-train_multiple_classifiers('vectors.pkl')
-# plot_vectors('vectors.pkl')
+# train_multiple_classifiers('vectors.pkl')
+plot_vectors('vectors.pkl')

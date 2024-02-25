@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 # from sklearn.metrics import plot_confusion_matrix
 from matplotlib.backends.backend_pdf import PdfPages
 
-from visualizer import plot_vectors
+from visualizer import plot_vectors_to_pdf
 
 from transformers import AutoTokenizer, BertModel, BertForMaskedLM
 tokenizer = AutoTokenizer.from_pretrained('dicta-il/BEREL_2.0')
@@ -112,7 +112,7 @@ def train_multiple_classifiers(vectors_file):
             fold_results.append(metrics)
 
             # Plot the 2D vectors
-            plot_vectors(X_test, y_pred, Classifier.__name__, metrics, pdf_pages)
+            plot_vectors_to_pdf(X_test, y_pred, Classifier.__name__, metrics, pdf_pages)
 
         # Average the metrics over all folds and store the results
         numeric_keys = ['Precision', 'Recall', 'F1 Score', 'Accuracy']
