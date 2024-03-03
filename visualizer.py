@@ -31,7 +31,8 @@ def plot_vectors(pickle_file, show_plot=True):
     if show_plot:
         plt.show()
     else:
-        return plt.gcf()
+        # return plt.gcf()
+        return plot.get_figure()
 
 
 def plot_vectors_to_pdf(vectors, labels, classifier_name, metrics, pdf_pages):
