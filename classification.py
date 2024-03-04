@@ -150,7 +150,7 @@ def compare_with_documents(single_document, class_vectors):
     outputs = model(**inputs)
     single_doc_vector = outputs[0][:, 0, :].detach().numpy().flatten().tolist()
 
-    # Calculate cosine similarity with each class of documents
+    # Calculate cosine similarity with each class of documentsאה
     similarities = {}
     for class_name, vectors in class_vectors.items():
         class_vectors_np = np.array([vec for _, vec in vectors])
