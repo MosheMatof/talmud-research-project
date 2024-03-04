@@ -2,7 +2,7 @@ import pickle
 from sklearn.decomposition import PCA
 import seaborn as sns
 import matplotlib.pyplot as plt
-import matplotlib.text as text
+from bidi.algorithm import get_display
 
 def plot_vectors(pickle_file, show_plot=True):
     # Load vectors from a pickle file
@@ -21,22 +21,15 @@ def plot_vectors(pickle_file, show_plot=True):
 
     # Plot the 2D vectors using seaborn
     if len(set(labels)) > 1:
-        plot = sns.scatterplot(x=vectors_2d[:, 0], y=vectors_2d[:, 1], hue=labels, palette='hls')
+        rtl_labels = get_display(name)
+        plot = sns.scatterplot(x=vectors_2d[:, 0], y=vectors_2d[:, 1], hue=rtl_labels, palette='hls')
     else:
         plot = sns.scatterplot(x=vectors_2d[:, 0], y=vectors_2d[:, 1])
 
     # Add text labels for each point
     for i, name in enumerate(names):
-        # plot.text(vectors_2d[i, 0], vectors_2d[i, 1], name)
-
-        # Create a Text object with the Hebrew label
-        hebrew_label = text.Text(x=vectors_2d[i, 0], y=vectors_2d[i, 1], text=name)
-
-        # Set the writing direction to 'rtl'
-        hebrew_label.set_writing_direction('rtl')
-
-        # Add the text object to the plot
-        plot.add_artist(hebrew_label)
+        rtl_name = get_display(name)
+        plot.text(vectors_2d[i, 0], vectors_2d[i, 1], rtl_name)
 
     if show_plot:
         plt.show()
