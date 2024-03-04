@@ -1,4 +1,5 @@
 import pickle
+import os
 from sklearn.decomposition import PCA
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -25,6 +26,8 @@ def plot_vectors(pickle_file, show_plot=True):
         plot = sns.scatterplot(x=vectors_2d[:, 0], y=vectors_2d[:, 1], hue=rtl_labels, palette='hls')
     else:
         plot = sns.scatterplot(x=vectors_2d[:, 0], y=vectors_2d[:, 1])
+
+    plt.title(os.path.basename(pickle_file))
 
     # Add text labels for each point
     for i, name in enumerate(names):
