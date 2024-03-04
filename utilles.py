@@ -11,7 +11,8 @@ def generate_csv_from_txt(csv_file_path, folder_path = files_path):
                     content = file.read()
                 # Get the directory name and append it to the filename
                 directory_name = os.path.basename(dirpath)
-                new_filename = filename + "_" + directory_name
+                filename_without_extension, _ = os.path.splitext(filename)
+                new_filename = filename_without_extension + "_" + directory_name
                 data.append((new_filename, content))
     df = pd.DataFrame(data, columns=['name', 'content'])
     df.to_csv(csv_file_path, index=False)
