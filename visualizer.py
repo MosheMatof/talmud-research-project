@@ -3,7 +3,7 @@ import os
 from sklearn.decomposition import PCA
 import seaborn as sns
 import matplotlib.pyplot as plt
-from bidi.algorithm import get_display
+from bidi.algorithm import get_display 
 
 def plot_vectors(pickle_file, show_plot=True):
     # Load vectors from a pickle file
