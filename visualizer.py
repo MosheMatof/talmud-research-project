@@ -3,7 +3,7 @@ import os
 from sklearn.decomposition import PCA
 import seaborn as sns
 import matplotlib.pyplot as plt
-from bidi.algorithm import get_display
+from bidi.algorithm import get_display 
 
 def plot_vectors(pickle_file, show_plot=True):
     # Load vectors from a pickle file
@@ -27,7 +27,8 @@ def plot_vectors(pickle_file, show_plot=True):
     else:
         plot = sns.scatterplot(x=vectors_2d[:, 0], y=vectors_2d[:, 1])
 
-    rtl_title = get_display(os.path.basename(pickle_file))
+    filename_without_extension, _ = os.path.splitext(os.path.basename(pickle_file))
+    rtl_title = get_display(filename_without_extension)
     plt.title(rtl_title)
 
     # Add text labels for each point
