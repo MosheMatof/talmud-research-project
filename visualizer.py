@@ -21,7 +21,7 @@ def plot_vectors(pickle_file, show_plot=True):
 
     # Plot the 2D vectors using seaborn
     if len(set(labels)) > 1:
-        rtl_labels = get_display(name)
+        rtl_labels = [get_display(label) for label in labels]
         plot = sns.scatterplot(x=vectors_2d[:, 0], y=vectors_2d[:, 1], hue=rtl_labels, palette='hls')
     else:
         plot = sns.scatterplot(x=vectors_2d[:, 0], y=vectors_2d[:, 1])
