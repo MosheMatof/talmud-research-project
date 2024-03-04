@@ -7,3 +7,5 @@ classifier_plots.pdf
 classifier_metrics.csv
 __pycache__/
 .vscode/launch.json
+vectors/
+
