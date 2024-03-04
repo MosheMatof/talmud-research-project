@@ -22,6 +22,9 @@ tokenizer = AutoTokenizer.from_pretrained('dicta-il/BEREL_2.0')
 model = BertModel.from_pretrained('dicta-il/BEREL_2.0')
 # model = BertForMaskedLM.from_pretrained('dicta-il/BEREL_2.0')
 
+# tokenizer = AutoTokenizer.from_pretrained("avichr/heBERT")
+# model = BertModel.from_pretrained("avichr/heBERT")
+
 def generate_vectors(df, name_column, content_column, vectors_file, progress_signal=None):
     vectors = {}
     for i, row in tqdm(df.iterrows(), total=df.shape[0]):
