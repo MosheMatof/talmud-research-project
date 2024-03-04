@@ -27,7 +27,8 @@ def plot_vectors(pickle_file, show_plot=True):
     else:
         plot = sns.scatterplot(x=vectors_2d[:, 0], y=vectors_2d[:, 1])
 
-    plt.title(os.path.basename(pickle_file))
+    rtl_title = get_display(os.path.basename(pickle_file))
+    plt.title(rtl_title)
 
     # Add text labels for each point
     for i, name in enumerate(names):
