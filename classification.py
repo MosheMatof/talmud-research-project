@@ -18,12 +18,12 @@ from matplotlib.backends.backend_pdf import PdfPages
 from visualizer import plot_vectors_to_pdf
 
 from transformers import AutoTokenizer, BertModel, BertForMaskedLM
-#tokenizer = AutoTokenizer.from_pretrained('dicta-il/BEREL_2.0')
-#model = BertModel.from_pretrained('dicta-il/BEREL_2.0')
+tokenizer = AutoTokenizer.from_pretrained('dicta-il/BEREL_2.0')
+model = BertModel.from_pretrained('dicta-il/BEREL_2.0')
 # model = BertForMaskedLM.from_pretrained('dicta-il/BEREL_2.0')
 
-tokenizer = AutoTokenizer.from_pretrained("avichr/heBERT")
-model = BertModel.from_pretrained("avichr/heBERT")
+# tokenizer = AutoTokenizer.from_pretrained("avichr/heBERT")
+# model = BertModel.from_pretrained("avichr/heBERT")
 
 def generate_vectors(df, name_column, content_column, vectors_file, progress_signal=None):
     vectors = {}
