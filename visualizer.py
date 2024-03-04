@@ -2,6 +2,7 @@ import pickle
 from sklearn.decomposition import PCA
 import seaborn as sns
 import matplotlib.pyplot as plt
+import matplotlib.text as text
 
 def plot_vectors(pickle_file, show_plot=True):
     # Load vectors from a pickle file
@@ -26,7 +27,16 @@ def plot_vectors(pickle_file, show_plot=True):
 
     # Add text labels for each point
     for i, name in enumerate(names):
-        plot.text(vectors_2d[i, 0], vectors_2d[i, 1], name)
+        # plot.text(vectors_2d[i, 0], vectors_2d[i, 1], name)
+
+        # Create a Text object with the Hebrew label
+        hebrew_label = text.Text(x=vectors_2d[i, 0], y=vectors_2d[i, 1], text=name)
+
+        # Set the writing direction to 'rtl'
+        hebrew_label.set_writing_direction('rtl')
+
+        # Add the text object to the plot
+        plot.add_artist(hebrew_label)
 
     if show_plot:
         plt.show()
