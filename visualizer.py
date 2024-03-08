@@ -5,25 +5,39 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from bidi.algorithm import get_display 
 
-def plot_vectors(pickle_file, show_plot=True):
+def plot_vectors(pickle_file, show_plot=True, image_path=None):
     # Load vectors from a pickle file
     with open(pickle_file, 'rb') as f:
         vectors_dict = pickle.load(f)
 
-    # Extract vectors and labels from the dictionary
-    labels = [key.split('_')[-1] for key in vectors_dict.keys()]
     vectors = list(vectors_dict.values())
-
-    names = [key.split('_')[0] for key in vectors_dict.keys()]
-
     # Reduce dimensionality to 2D using PCA
     pca = PCA(n_components=2)
     vectors_2d = pca.fit_transform(vectors)
 
+    labels = []
+    groups = []
+    names = []
+    for key in vectors_dict.keys():
+        parts = key.split('_')
+        name = parts[0]
+        names.append(name)
+        label = parts[1]
+        labels.append(label)
+        if len(parts) > 2:
+            group = parts[2]
+            groups.append(group)
+        else:
+            groups.append(None)
+
     # Plot the 2D vectors using seaborn
     if len(set(labels)) > 1:
         rtl_labels = [get_display(label) for label in labels]
-        plot = sns.scatterplot(x=vectors_2d[:, 0], y=vectors_2d[:, 1], hue=rtl_labels, palette='hls')
+        if any(groups) and len(set(groups)) > 1:
+            rtl_groups = [get_display(group) if group else None for group in groups]
+            plot = sns.scatterplot(x=vectors_2d[:, 0], y=vectors_2d[:, 1], hue=rtl_labels, style=rtl_groups, palette='hls')
+        else:
+            plot = sns.scatterplot(x=vectors_2d[:, 0], y=vectors_2d[:, 1], hue=rtl_labels, palette='hls')
     else:
         plot = sns.scatterplot(x=vectors_2d[:, 0], y=vectors_2d[:, 1])
 
@@ -38,9 +52,14 @@ def plot_vectors(pickle_file, show_plot=True):
 
     if show_plot:
         plt.show()
+        plt.close()
+    if image_path:
+        plt.savefig(image_path)
+        plt.close()
     else:
-        # return plt.gcf()
-        return plot.get_figure()
+        fig = plot.get_figure()
+        plt.close(fig)
+        return fig
 
 
 def plot_vectors_to_pdf(vectors, labels, classifier_name, metrics, pdf_pages):
